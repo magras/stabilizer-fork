@@ -177,6 +177,7 @@ void onTrap(int sig, siginfo_t* info, void* p) {
     oldLocation->release();
   }
 
+  DEBUG("Function %p relocated to %p", c.ip(), f->getCurrentLocation()->getBase());
   c.ip() = f->getCurrentLocation()->getBase();
 }
 
@@ -226,7 +227,7 @@ void setTimer(int msec) {
   timer.it_interval.tv_sec = 0;
   timer.it_interval.tv_usec = 0;
 
-  setitimer(ITIMER_REAL, &timer, 0);
+  //setitimer(ITIMER_REAL, &timer, 0);
 }
 
 void setHandler(int sig, void (*fn)(int, siginfo_t*, void*)) {
