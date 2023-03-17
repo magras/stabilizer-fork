@@ -23,16 +23,25 @@ jobs:
         submodules: recursive
 
     - name: Install dependencies
-      run: sudo apt-get install -y --no-install-recommends clang-${{matrix.llvm}} llvm-${{matrix.llvm}}-dev python3
+      run:
+        sudo apt-get install -y --no-install-recommends
+          clang-${{matrix.llvm}} llvm-${{matrix.llvm}}-dev python3
 
     - name: Configure CMake
       run:
-        cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{matrix.build}} -DCMAKE_C_COMPILER=clang-${{matrix.llvm}} -DCMAKE_CXX_COMPILER=clang++-${{matrix.llvm}} -DSTABILIZER_LLVM_VERSION=$(llvm-config-${{matrix.llvm}} --version)
+        cmake -B ${{github.workspace}}/build
+          -DCMAKE_BUILD_TYPE=${{matrix.build}}
+          -DCMAKE_C_COMPILER=clang-${{matrix.llvm}}
+          -DCMAKE_CXX_COMPILER=clang++-${{matrix.llvm}}
+          -DSTABILIZER_LLVM_VERSION=$(llvm-config-${{matrix.llvm}} --version)
 
     - name: Build
-      run: |
-        export PATH="/usr/lib/llvm-${{matrix.llvm}}/bin:$PATH"
+      run:
+        PATH="/usr/lib/llvm-${{matrix.llvm}}/bin:$PATH"
         cmake --build ${{github.workspace}}/build --config ${{matrix.build}}
 
     - name: Test
-      run: ctest --test-dir ${{github.workspace}}/build --build-config ${{matrix.build}} --output-on-failure
+      run:
+        ctest --test-dir ${{github.workspace}}/build
+          --build-config ${{matrix.build}}
+          --output-on-failure
